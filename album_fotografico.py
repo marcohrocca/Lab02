@@ -19,6 +19,7 @@ def elenco_foto_anno_per_titolo(album, anno):
 
 
 def main():
+
     album = []
     file_path = "album_fotografico.csv"
 
