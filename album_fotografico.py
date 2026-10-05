@@ -1,6 +1,40 @@
 def carica_da_file(file_path):
     """Carica le foto dal file, creando un nuovo anno ogni volta che compare per la prima volta"""
-    with open(file_path, "r") as filein:
+    "puoi usare qualsiasi struttura dati"
+    album=[]
+    try:
+        with open(file_path) as infile:
+            infile.readline() #letta prima riga,a vuoto per skippare intestazione
+            for riga in infile:
+                #essendo un csv dividiamo le parole usando la virgola
+                lista_valori=riga.strip().split(",")
+            #controlliamo che riga non sia vuota e abbia tutti i campi
+                if len(lista_valori)==5:
+                    codice=lista_valori[0]
+                    titolo=lista_valori[1]
+                    autore=lista_valori[2]
+                    mese=int(lista_valori[3])
+                    anno=int(lista_valori[4])
+                    foto=[codice,titolo,autore,mese,anno]
+                # Ora check se anno già presente in album
+                    anno_trovato=False
+                    for blocco_anno in album:
+                        if blocco_anno[0]==anno:  #blocco_anno[0] indica che prendiamo il primo elemento non dell'album,ma della sottolista avente come primo mebro album e secondo la foto
+                            #se la risposta e sì infatti non aggiungo la foto a blocco_anno[0] che è l'anno ma
+                            # a secondo elemento che è la lista delle foto
+                            blocco_anno[1].append(foto)
+                            anno_trovato=True
+                            break
+                    if not anno_trovato:
+                        album.append([anno,[foto]]) #La struttura che ho scelto è infatti
+                        #Lista 1 album contenitore esterno
+                        #con elementi liste da 2 elementi anno e una terza lista contenitore ancora più piccolo contenente info di tutte le foto
+    except FileNotFoundError:
+        return None
+    return album
+
+
+
 
 
 
