@@ -41,7 +41,43 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    # TODO
+    # check se mese valido
+    if mese<1 or mese>12:
+        return None
+    #check se cod foto già nell'album
+    for blocco_anno in album:
+        lista_foto=blocco_anno[1]
+        for foto in lista_foto:
+            if foto[0]==codice:
+                return None
+    nuova_foto=[codice,titolo,autore,mese,anno]
+    nuova_riga = f"{codice},{titolo},{autore},{mese},{anno}\n"
+    #scrittura della foto nel file
+    try:
+        with open(file_path,"r") as infile:
+            lista_righe=infile.readlines()
+            lista_righe.append(nuova_riga)
+        with open(file_path,"w") as outfile:
+            for riga in lista_righe:
+                outfile.write(riga)
+    except FileNotFoundError:
+        return None
+
+    #Aggiornamento dell'album(basta usare la stessa logica di prima,faccio copia incolla funzione precedente)
+    anno_trovato = False
+    for blocco_anno in album:
+        if blocco_anno[
+            0] == anno:  # blocco_anno[0] indica che prendiamo il primo elemento non dell'album,ma della sottolista avente come primo mebro album e secondo la foto
+            # se la risposta e sì infatti non aggiungo la foto a blocco_anno[0] che è l'anno ma
+            # a secondo elemento che è la lista delle foto
+            blocco_anno[1].append(nuova_foto)
+            anno_trovato = True
+            break
+    if not anno_trovato:
+        album.append([anno, [nuova_foto]])
+    #Ultima cosa da fare return a riferimenti foto aggiunta
+    return nuova_foto
+
 
 
 def cerca_foto(album, codice):
